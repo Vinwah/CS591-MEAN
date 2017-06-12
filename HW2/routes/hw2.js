@@ -85,6 +85,11 @@ router.post('/', function(req, res, next){
 })
 
 
+router.delete('/', function(req, res, next) {
+    res.json({error: "String must be provided in url '/hw2/someStringToDelete'"})
+});
+
+
 router.delete('/:string', function(req, res, next) {
     stringModel.find({theString: req.params.string}, function (err, results) {
         if (err) {res.json(err)}
