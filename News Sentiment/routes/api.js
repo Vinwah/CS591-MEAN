@@ -11,6 +11,7 @@ let searchPhraseController = require('../controllers/searchPhraseController');
 let newsArticleModel = require('../models/newsArticleModel');
 
 // Get an array of source Objects [{source, sourceRating, [Articles]}] for the indicated sources and the given phrase
+// Needs authorization to be executed
 router.get('/articles/:thePhrase', authorized, function (req, res, next) {
     // if only one source was requested, change the given source into a one-element arrya
     if (typeof req.query.sources == 'string') {req.query.sources = [req.query.sources]}

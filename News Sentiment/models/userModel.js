@@ -1,3 +1,5 @@
+//Model used for storing users in the mongoDB
+
 const mongoose = require('mongoose')
 let config = require('../config')
 

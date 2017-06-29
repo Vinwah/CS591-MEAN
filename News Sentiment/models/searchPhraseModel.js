@@ -1,3 +1,5 @@
+//Model used for storing search history in the mongoDB
+
 const mongoose = require('mongoose')
 const config = require('../config')
 

@@ -1,3 +1,5 @@
+//Model used for storing news articles in the mongoDB
+
 const mongoose = require('mongoose')
 const config = require('../config')
 
