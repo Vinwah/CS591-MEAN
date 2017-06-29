@@ -1,5 +1,8 @@
 .DS_Store
 
+# Config Files:
+config.js
+
 # Webstorm preferences folder
 .idea
 # Logs

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Latest compiled and minified jQuery -->
+    <script src="https://code.jquery.com/jquery-2.2.3.js"
+            integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous"></script>
+    <!-- Angular (minified) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-cookies.js"></script>
+
+
+    <!--Controllers for this page/app -->
+    <script src="./javascripts/controllers.js"></script>
+    <!-- Local styles -->
+    <link rel="stylesheet" href="./stylesheets/style.css">
+
+</head>
+
+<body ng-app="cs591">
+<div ng-controller="cs591ctrl" ng-init="initApp()">
+
+    <!-- application logo and logout button at top of the page (logout only if authorized) -->
+    <div>
+        <img src="./images/logo.png">
+        <button ng-show="authorized" style="vertical-align: 100%;" type="submit" class="btn btn-default btn-xs" ng-click="logout()">Log out</button>
+    </div>
+
+    <!-- if not authorized show application description -->
+    <div ng-hide="authorized">
+        <br/>
+        <h1>Welcome to News Sentiment!</h1>
+        <p>News Sentiment provides sentiment rating for a variety of news channels on any searchable topic</p>
+        <p>so that you can get a better understanding of what biases your news providers exposes you to</p>
+        <br/>
+        <br/>
+        <p><button type="submit" class="btn btn-primary" ng-click="doTwitterAuth()">Log in with Twitter</button>
+    </div>
+
+    <!-- if authorized: -->
+    <div ng-show="authorized">
+        <div style="float: left; text-align: left; padding-left: 20%">
+            <br/>
+            <!-- left side of page search interface -->
+            <h3>SEARCH HERE:</h3>
+            <form class="form-inline" name="inputForm">
+                <div class="form-group">
+                    <!-- search field -->
+                    <input type="text" class="form-control" id="phrase" placeholder="Enter string" ng-model="searchPhrase" required>
+                </div>
+                <br/><br/>
+                <!-- checkboxes for selecting sources -->
+                <div class="form-group">
+                    The Wall Street Journal<label style="padding-left: 0px"></label> <input type="checkbox" name="newsChannels" ng-model="newsChannelWSJ">
+                    <br/>
+                    CNN<label style="padding-left: 128px"></label><input type="checkbox" name="newsChannels" ng-model="newsChannelCNN">
+                    <br/>
+                    Daily Mail<label style="padding-left: 88px"></label> <input type="checkbox" name="newsChannels" ng-model="newsChannelDM">
+                    <br/>
+                    Al Jazeera English<label style="padding-left: 33px"></label> <input type="checkbox" name="newsChannels" ng-model="newsChannelAJE">
+                    <br/>
+                    The Huffington Post<label style="padding-left: 18px"></label> <input type="checkbox" name="newsChannels" ng-model="newsChannelHP">
+                    <br/>
+                    The Guardian UK<label style="padding-left: 39px"></label> <input type="checkbox" name="newsChannels" ng-model="newsChannelTG">
+                    <br/>
+                </div>
+                <br/><br/>
+                <div class="form-group">
+                    <!-- submit button -->
+                    <button type="submit" class="btn btn-primary" ng-disabled="inputForm.$invalid" ng-click="doSearch()">Search</button>
+                </div>
+                <br/>
+                <br/>
+                <div ng-show="hasSearched" style="text-align: left">
+                    <!-- display sources in ascending order (sorted in controller) -->
+                    <dl ng-repeat="source in sources">
+                        <dt>{{$index + 1}}: {{mapNewsName(source.source)}}</dt>
+                    </dl>
+                </div>
+            </form>
+        </div>
+        <!-- If a search has been done show articles on mid-right side of page -->
+        <div ng-show="hasSearched" style=" width: 1000px; text-align: left; padding-left: 450px;">
+            <br/>
+            <dl ng-repeat="source in sources">
+                <!-- news channel name and its rating -->
+                <dt><h1>{{mapNewsName(source.source)}}: {{source.sourceRating | number:3}}</h1></dt>
+                <dl ng-repeat="article in source.articles">
+                    <dt style="padding-left: 40px">
+                        <!-- article title as a link and rating of article -->
+                    <h3><a href="{{article.url}}" style="color: dodgerblue">{{article.title}}</a> <br/> (Rating: {{article.rating.score | number:3}})</h3>
+                    <dd style="padding-left: 40px">
+                        <!-- picture provided in article and the article description -->
+                        <p></p><img height="180" width="256" src="{{article.urlToImage}}"><p/>
+                        {{article.description}}
+                    </dd>
+                    <br/>
+                    </dt>
+                </dl>
+                <br/><br/>
+            </dl>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
